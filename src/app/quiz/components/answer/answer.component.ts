@@ -10,4 +10,5 @@ import { Component, input } from '@angular/core';
 export class AnswerComponent {
   answerText = input.required<string>()
   answerIndex = input.required<number>()
+  letterMap = ["A", "B", "C", "D"];
 }

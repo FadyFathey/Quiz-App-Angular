@@ -13,11 +13,35 @@ export class QuizService {
     const currentQuestionIndex = this.showResult() ? this.currentQuestionIndex() :
       this.currentQuestionIndex() + 1
     this.currentQuestionIndex.set(currentQuestionIndex)
+    // increment currentQuestionIndex
+
   }
-  currentQuestionAnswers = computed(() => [this.currentQuestion().correctAnswer, ...this.currentQuestion().incorrectAnswers])
+  currentQuestionAnswers = computed(() => this.shuffleAnswers(this.currentQuestion()))
+
+  shuffleAnswers(question: QuestionInterface): string[] {
+
+    const allAnswers = [...question.incorrectAnswers, question.correctAnswer];
+
+
+    const answersWithRandomNumbers = allAnswers.map(answer => {
+      return {
+        value: answer,
+        randomNumber: Math.random()
+      };
+    });
+
+
+    const shuffledAnswers = answersWithRandomNumbers.sort((a, b) => {
+      return a.randomNumber - b.randomNumber;
+    });
+
+
+    return shuffledAnswers.map(item => item.value);
+  }
   restart(): void {
     this.currentQuestionIndex.set(0)
   }
+
   constructor() { }
   getMockQuestions(): QuestionInterface[] {
     return [
