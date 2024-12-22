@@ -1,9 +1,10 @@
 <div class="quiz">
     <div>
-        <div class="score">Question 1 of 10</div>
+        <div class="score">Question {{QuizService.currentQuestionIndex()+1}} of
+            {{QuizService.getMockQuestions().length}}</div>
     </div>
     <app-question />
-    <div class="next-button">
+    <div (click)="QuizService.goToNextQuestion()" class="next-button">
         Next Question
     </div>
 </div>

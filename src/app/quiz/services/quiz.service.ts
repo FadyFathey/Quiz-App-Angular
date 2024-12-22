@@ -1,11 +1,18 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { QuestionInterface } from '../types/quiz.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
+  questions = signal<QuestionInterface[]>(this.getMockQuestions())
+  currentQuestionIndex = signal<number>(0)
+  currentQuestion = computed(() => this.questions()[this.currentQuestionIndex()])
+  showResult = computed(() => this.currentQuestionIndex() === this.questions().length - 1)
+  goToNextQuestion(): void {
 
+    this.currentQuestionIndex.set(this.currentQuestionIndex() + 1)
+  }
   constructor() { }
   getMockQuestions(): QuestionInterface[] {
     return [

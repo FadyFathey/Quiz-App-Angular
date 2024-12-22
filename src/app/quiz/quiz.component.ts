@@ -1,5 +1,6 @@
+import { QuizService } from './services/quiz.service';
 import { QuestionComponent } from './components/question/question.component';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-quiz',
@@ -9,5 +10,5 @@ import { Component } from '@angular/core';
   styleUrl: './quiz.component.css'
 })
 export class QuizComponent {
-
+  QuizService = inject(QuizService);
 }
