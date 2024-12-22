@@ -1,4 +1,22 @@
 <div class="quiz">
+    @if (QuizService.showResult())
+    {
+    <div class="results">
+        <div class="congratulations">
+            congratulations
+        </div>
+        <div class="results-info">
+            <div>You Have Completed The Quiz .</div>
+            <div>
+                You've got 99 of {{QuizService.questions().length}} right.
+            </div>
+            <div (click)="QuizService.restart()" class="next-button">Restart</div>
+        </div>
+    </div>
+    }
+
+    @if (!QuizService.showResult())
+    {
     <div>
         <div class="score">Question {{QuizService.currentQuestionIndex()+1}} of
             {{QuizService.getMockQuestions().length}}</div>
@@ -7,4 +25,6 @@
     <div (click)="QuizService.goToNextQuestion()" class="next-button">
         Next Question
     </div>
+    }
+
 </div>

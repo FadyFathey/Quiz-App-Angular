@@ -10,8 +10,13 @@ export class QuizService {
   currentQuestion = computed(() => this.questions()[this.currentQuestionIndex()])
   showResult = computed(() => this.currentQuestionIndex() === this.questions().length - 1)
   goToNextQuestion(): void {
-
-    this.currentQuestionIndex.set(this.currentQuestionIndex() + 1)
+    const currentQuestionIndex = this.showResult() ? this.currentQuestionIndex() :
+      this.currentQuestionIndex() + 1
+    this.currentQuestionIndex.set(currentQuestionIndex)
+  }
+  currentQuestionAnswers = computed(() => [this.currentQuestion().correctAnswer, ...this.currentQuestion().incorrectAnswers])
+  restart(): void {
+    this.currentQuestionIndex.set(0)
   }
   constructor() { }
   getMockQuestions(): QuestionInterface[] {

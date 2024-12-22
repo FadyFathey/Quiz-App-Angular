@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-answer',
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './answer.component.css'
 })
 export class AnswerComponent {
-
+  answerText = input.required<string>()
+  answerIndex = input.required<number>()
 }

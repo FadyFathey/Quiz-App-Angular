@@ -3,6 +3,8 @@
         {{QuizService.currentQuestion().question}}
     </div>
     <div class="answers">
-        <app-answer></app-answer>
+        @for ( currentQuestionAnswer of QuizService.currentQuestionAnswer(); track $index) {
+        <app-answer [answerText]="currentQuestionAnswer" [answerIndex]="$index" />
+        }
     </div>
 </div>
