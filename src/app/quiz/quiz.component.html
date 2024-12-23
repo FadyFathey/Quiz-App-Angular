@@ -22,7 +22,7 @@
             {{QuizService.getMockQuestions().length}}</div>
     </div>
     <app-question />
-    @if(QuizService.currentAnswer())
+    @if(QuizService.currentAnswer() && QuizService.questions().length>0)
     {
     <div (click)="QuizService.goToNextQuestion()" class="next-button">
         Next Question

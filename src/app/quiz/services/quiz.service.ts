@@ -1,11 +1,15 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { QuestionInterface } from '../types/quiz.interface';
+import { map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ApiQuestionInterface } from '../types/apiQeustions.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
-  questions = signal<QuestionInterface[]>(this.getMockQuestions())
+  http = inject(HttpClient)
+  questions = signal<QuestionInterface[]>([])
   currentQuestionIndex = signal<number>(0)
   currentAnswer = signal<string | null>(null)
   correctAnswerCount = signal<number>(0)
@@ -44,6 +48,24 @@ export class QuizService {
     this.currentAnswer.set(answerText)
     const correctAnswerCount = answerText === this.currentQuestion().correctAnswer ? this.correctAnswerCount() + 1 : this.correctAnswerCount()
     this.correctAnswerCount.set(correctAnswerCount)
+  }
+  getQuestions(): Observable<QuestionInterface[]> {
+    const apiUrl = 'https://opentdb.com/api.php?amount=8&type=multiple'
+    return this.http.get<{ results: ApiQuestionInterface[] }>(apiUrl).pipe(
+      map(response => this.normalizeQuestions(response.results))
+    )
+  }
+
+
+  normalizeQuestions(apiQuestion: ApiQuestionInterface[]): QuestionInterface[] {
+    return apiQuestion.map(apiQuestion => {
+      const incorrectAnswers = apiQuestion.incorrect_answers.map(incorrectAnswer => decodeURIComponent(incorrectAnswer))
+      return {
+        question: decodeURIComponent(apiQuestion.question),
+        correctAnswer: decodeURIComponent(apiQuestion.correct_answer),
+        incorrectAnswers: incorrectAnswers
+      }
+    })
   }
   restart(): void {
     this.currentQuestionIndex.set(0)
