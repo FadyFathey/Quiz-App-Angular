@@ -8,7 +8,7 @@
         <div class="results-info">
             <div>You Have Completed The Quiz .</div>
             <div>
-                You've got 99 of {{QuizService.questions().length}} right.
+                You've got {{QuizService.correctAnswerCount()}} of {{QuizService.questions().length}} right.
             </div>
             <div (click)="QuizService.restart()" class="next-button">Restart</div>
         </div>
@@ -22,9 +22,13 @@
             {{QuizService.getMockQuestions().length}}</div>
     </div>
     <app-question />
+    @if(QuizService.currentAnswer())
+    {
     <div (click)="QuizService.goToNextQuestion()" class="next-button">
         Next Question
     </div>
+    }
+
     }
 
 </div>
