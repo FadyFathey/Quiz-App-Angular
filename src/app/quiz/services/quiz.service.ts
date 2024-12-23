@@ -7,13 +7,15 @@ import { QuestionInterface } from '../types/quiz.interface';
 export class QuizService {
   questions = signal<QuestionInterface[]>(this.getMockQuestions())
   currentQuestionIndex = signal<number>(0)
+  currentAnswer = signal<string | null>(null)
+  correctAnswerCount = signal<number>(0)
   currentQuestion = computed(() => this.questions()[this.currentQuestionIndex()])
   showResult = computed(() => this.currentQuestionIndex() === this.questions().length - 1)
   goToNextQuestion(): void {
     const currentQuestionIndex = this.showResult() ? this.currentQuestionIndex() :
       this.currentQuestionIndex() + 1
     this.currentQuestionIndex.set(currentQuestionIndex)
-    // increment currentQuestionIndex
+    this.currentAnswer.set(null)
 
   }
   currentQuestionAnswers = computed(() => this.shuffleAnswers(this.currentQuestion()))
@@ -37,6 +39,11 @@ export class QuizService {
 
 
     return shuffledAnswers.map(item => item.value);
+  }
+  selectAnswer(answerText: string): void {
+    this.currentAnswer.set(answerText)
+    const correctAnswerCount = answerText === this.currentQuestion().correctAnswer ? this.correctAnswerCount() + 1 : this.correctAnswerCount()
+    this.correctAnswerCount.set(correctAnswerCount)
   }
   restart(): void {
     this.currentQuestionIndex.set(0)
