@@ -1,34 +1,37 @@
 <div class="quiz">
-    @if (QuizService.showResult())
-    {
-    <div class="results">
-        <div class="congratulations">
-            congratulations
+    <ng-container *ngIf="QuizService.error(); else mainQuizContent">
+        <div class="error">
+            {{ QuizService.error() }}
         </div>
-        <div class="results-info">
-            <div>You Have Completed The Quiz .</div>
-            <div>
-                You've got {{QuizService.correctAnswerCount()}} of {{QuizService.questions().length}} right.
+    </ng-container>
+
+    <ng-template #mainQuizContent>
+        <ng-container *ngIf="QuizService.showResult(); else questionContent">
+            <div class="results">
+                <div class="congratulations">
+                    Congratulations
+                </div>
+                <div class="results-info">
+                    <p>You Have Completed The Quiz.</p>
+                    <p>You've got {{ QuizService.correctAnswerCount() }} of {{ QuizService.questions().length }} right.
+                    </p>
+                    <button (click)="QuizService.restart()" class="next-button">Restart</button>
+                </div>
             </div>
-            <div (click)="QuizService.restart()" class="next-button">Restart</div>
-        </div>
-    </div>
-    }
+        </ng-container>
 
-    @if (!QuizService.showResult())
-    {
-    <div>
-        <div class="score">Question {{QuizService.currentQuestionIndex()+1}} of
-            {{QuizService.getMockQuestions().length}}</div>
-    </div>
-    <app-question />
-    @if(QuizService.currentAnswer() && QuizService.questions().length>0)
-    {
-    <div (click)="QuizService.goToNextQuestion()" class="next-button">
-        Next Question
-    </div>
-    }
-
-    }
-
+        <ng-template #questionContent>
+            <div>
+                <div class="score">
+                    Question {{ QuizService.currentQuestionIndex() + 1 }} of {{ QuizService.getMockQuestions().length }}
+                </div>
+            </div>
+            <app-question></app-question>
+            <div *ngIf="QuizService.currentAnswer() && QuizService.questions().length > 0">
+                <button (click)="QuizService.goToNextQuestion()" class="next-button">
+                    Next Question
+                </button>
+            </div>
+        </ng-template>
+    </ng-template>
 </div>
